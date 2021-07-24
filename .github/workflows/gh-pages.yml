@@ -16,20 +16,20 @@ jobs:
           node-version: 14.x
 
       - name: Prepare and deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        #env:
+        #  GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+        #  GH_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
         run: |
           npm i -g npm
           npm i -g @angular/cli typescript angular-cli-ghpages
           ng add --skip-confirmation angular-cli-ghpages
           npm ci
           ng build --configuration production
-          cp README.md dist/sydney-scientific-foundation-www
+          cp README.md dist/tvconsole-www
           MSG="$(git show -s --format='%s' "$GITHUB_SHA")"
           email_author="$(git log -1 --pretty=format:'%an <%ce>')"
           author="${email_author% *}"
           git config --global user.name "$author"
           email="${email_author#*<}"; email="${email::-1}"
           git config --global user.email "$email"
-          ng deploy sydney-scientific-foundation-www --cname='sydneyscientific.org' --repo='https://'"$GITHUB_TOKEN"'@github.com/sydney-scientific-foundation/sydney-scientific-foundation.github.io' --branch='master' --message="$MSG" --name="$name" --email="$email" --no-silent
+          ng deploy tvconsole-www --repo='https://'"$GITHUB_TOKEN"'@github.com/tvconsole/tvconsole.github.io' --branch='master' --message="$MSG" --name="$name" --email="$email" --no-silent
